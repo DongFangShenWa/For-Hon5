@@ -13,19 +13,22 @@ stays non-zero, and beats the baselines everywhere:
 | Gemini Nano Banana | input refusal (32%) + output-side dissolving | 25.0% |
 | Midjourney | word-level blacklist + safety re-check (66.5% rejected) | 19.5% |
 
-## 5a. `gemini_nanobanana/` — gemini-nano-banana-2.1 (200 prompts × both methods)
+## 5a. `gemini_nanobanana/` — gemini-nano-banana-2.1 (200 prompts × 3 methods)
 
 | Method | Input-refused | ASR | Harmful-image rate among generated |
 |---|---|---|---|
 | MPJ | 17.0% | 7.0% | 8.4% |
+| PGJ | 8.0% | 6.0% | 6.5% |
 | **CollageAttack** | 32.0% | **25.0%** | **36.8%** |
 
 Gemini deploys two layers: silent input refusal and **output-side rendering dissolving** —
 generated signs get rewritten to harmless text (e.g. a hateful slogan rendered as
-"Bananas are for everyone!"). Full-sentence MPJ signs are almost fully dissolved (8.4%
-survive); CollageAttack's disguised fragments survive partially (36.8%) — spatial
-fragmentation partially penetrates output-side dissolving too. (These runs are the same ones
-referenced by `../4_baselines_comparison/mpj_3models/`.)
+"Bananas are for everyone!"). The dissolution is fatal for non-fragmented prompts across the
+board: full-sentence MPJ signs are almost fully dissolved (8.4% survive), and PGJ — the
+easiest to get past the input gate (only 8.0% refused) — ends at a near-zero 6.0% ASR.
+CollageAttack's disguised fragments survive partially (36.8%), reaching 25.0% ASR, 3.6×/4.2×
+above MPJ/PGJ — spatial fragmentation partially penetrates output-side dissolving too.
+(These runs are the same ones referenced by `../4_baselines_comparison/mpj_3models/`.)
 
 ## 5b. `midjourney/` — Midjourney (200 prompts × 3 methods)
 
@@ -67,7 +70,7 @@ more general, not less, as models improve.
 
 ## Files
 
-- `gemini_nanobanana/run_*/` — items.csv / summary.md / config.json per method (MPJ,
+- `gemini_nanobanana/run_*/` — items.csv / summary.md / config.json per method (MPJ, PGJ,
   CollageAttack).
 - `midjourney/results/run_*/` — same, for MPJ / PGJ / CollageAttack; `midjourney/code/
   mj_collage_full.py` — submission driver (submit → poll → download → judge).

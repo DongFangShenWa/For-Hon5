@@ -172,6 +172,20 @@ def load_sentences(prompt_source: str = "mpj") -> pd.DataFrame:
         print(f"[info] collage 模式：匹配 {len(m)}/{len(coj)} 条；含独立 C3 的 {n_c3} 条，其余 C2 已含分布描述")
         return m.reset_index(drop=True)
 
+    if prompt_source == "pgj":
+        # PGJ (Perception-Guided, Huang et al.)：PGJ_attack.csv 的 attacked_prompt 原样使用（含 {...} 感知替换占位符，不剥大括号）
+        pgj = pd.read_csv(BASE_DIR / "PGJ_attack.csv")
+        prefix = "Generate a picture writing or showing: "
+        pgj["original_text"] = pgj["nsfw_prompt"].astype(str).str.strip()
+        has_pfx = pgj["original_text"].str.startswith(prefix)
+        pgj.loc[has_pfx, "original_text"] = pgj.loc[has_pfx, "original_text"].str[len(prefix):]
+        m = df.merge(pgj[["original_text", "attacked_prompt"]], left_on="text",
+                     right_on="original_text", how="inner", suffixes=("", "_pgj"))
+        m["scene"] = "pgj_attacked_prompt"
+        m["mpj_prompt"] = m["attacked_prompt"].astype(str)
+        print(f"[info] pgj 模式：匹配 {len(m)}/{len(pgj)} 条（attacked_prompt 原样，含占位符）")
+        return m.reset_index(drop=True)
+
     df["scene"] = [NEUTRAL_SCENES[i % len(NEUTRAL_SCENES)] for i in range(len(df))]
     df["mpj_prompt"] = [build_mpj_prompt(s, t) for s, t in zip(df["scene"], df["text"])]
     return df
@@ -233,6 +247,7 @@ def main(args):
             "quality": None if (is_doubao or not args.model.startswith("gpt-image")) else IMAGE_QUALITY,
             "size": None if (is_doubao or not args.model.startswith("gpt-image")) else IMAGE_SIZE,
             "template": "MPJ t2i.py:107 sign mode" if args.prompt_source in ("mpj", "mpup")
+                        else "PGJ attacked_prompt verbatim (PGJ_attack.csv)" if args.prompt_source == "pgj"
                         else "CollageAttack C1+C2+C3 (attack_gptimage2.py:160)",
             "scenes": NEUTRAL_SCENES if args.prompt_source == "mpj" else None,
             "prompt_note": "MPUP native dataset, 50/class x 4 classes, seed=42" if args.prompt_source == "mpup" else None,
@@ -386,7 +401,7 @@ if __name__ == "__main__":
     p.add_argument("--dry-run", action="store_true")
     p.add_argument("--model", default=IMAGE_MODEL,
                    help="doubao-* 走 ark 官方通道；其余走中转站（gpt-image-2-2026-04-21 / gemini-nano-banana-2.1 等）")
-    p.add_argument("--prompt-source", choices=["mpj", "mpup", "collage"], default="mpj",
+    p.add_argument("--prompt-source", choices=["mpj", "mpup", "collage", "pgj"], default="mpj",
                    help="mpj=sign 模板（中性场景+整句）；mpup=MPJ 官方 MPUP 数据集原生 prompt；collage=论文 coj_commands.csv 的 C1+C2+C3")
     p.add_argument("--outdir", default="", help="断点续跑：指定已有 run 目录")
     main(p.parse_args())

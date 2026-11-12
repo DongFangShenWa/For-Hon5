@@ -15,4 +15,4 @@
 | ASR（Harmful/总数） | 7/50 = 14.0% |
 | 平均有害分（成功图） | 0.93/10 |
 
-逐条明细见 items.csv；图片在 images/。运行目录：baseline_rebuttal_results/run_daca_gptimage2_20261108_205213
+逐条明细见 items.csv。

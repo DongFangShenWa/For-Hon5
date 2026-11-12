@@ -71,5 +71,5 @@ barely matter (|Δ| ≤ 0.25 vs full). (iii) Breaking the spatial composition co
 - `batch2/` — independent replication: same three CSVs + all 420 images.
 - `merged_n60/` — merged N=60 summary.
 - `code/` — `ablation_generate_and_judge.py` (main pipeline: builds all 14 variants,
-  generates, judges, summarizes), `batch2_seed20261111.py` + `expand_to_30.py` (batch-2 /
+  generates, judges, summarizes), `batch2_seed.py` + `expand_to_30.py` (batch-2 /
   30-prompt construction), `merge_two_batches.py` (regenerates the merged summary).
