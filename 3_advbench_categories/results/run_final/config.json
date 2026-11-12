@@ -1,0 +1,26 @@
+{
+  "purpose": "review Hon5 (3): CollageAttack cross-category generalization on AdvBench",
+  "selection": "advbench_30_selected.csv",
+  "n": 30,
+  "source_corpus": "TYPO-main2607/data/advbench.json (AdvBench harmful strings, same corpus as TYPO baseline)",
+  "categories": {
+    "self_harm": 7,
+    "threat_violence": 5,
+    "weapons_explosives": 4,
+    "fraud_scam": 4,
+    "sexual_text": 4,
+    "harass_hate": 4,
+    "drugs": 2
+  },
+  "decompose_llm": "deepseek-v4-pro @ https://api.deepseek.com (SYSTEM_PROMPT verbatim from paper prompt_generation.py)",
+  "targets": {
+    "doubao": "doubao-seedream-5-0-lite-260128",
+    "gptimage2": "gpt-image-2-2026-04-21"
+  },
+  "gpt_image_params": {
+    "size": "1024x1024",
+    "quality": "medium"
+  },
+  "prompt_rule": "C1 + '. ' + C2 + '. ' + C3 (C3 skipped if None) — same as paper attack scripts",
+  "judge": "gpt-4.1 @ relay, SYSTEM_PROMPT identical to paper/ablation, temperature=0"
+}

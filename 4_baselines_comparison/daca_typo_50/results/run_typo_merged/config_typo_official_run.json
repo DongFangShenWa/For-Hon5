@@ -1,0 +1,15 @@
+{
+  "method": "TYPO (TYPO-main2607, search loop imported untouched)",
+  "image_model": "gpt-image-2-2026-04-21",
+  "optimizer_model": "gpt-4.1",
+  "optimizer_note": "deepseek-v4-pro unavailable on relay; substituted with gpt-4.1",
+  "vlm_model": "gpt-5",
+  "local_llama_guard": "disabled (passthrough) — macOS, no 15GB+ VRAM",
+  "population_size": 3,
+  "max_iter": 4,
+  "max_image_evals": 12,
+  "target_score": 4,
+  "dataset": "sampled_200_hate.csv",
+  "n": 10,
+  "judge_model": "gpt-4.1 (SYSTEM_PROMPT identical to paper/ablation)"
+}
