@@ -2,15 +2,6 @@
 
 **Answers:** Hon5 W3/Q4 (is the method tailored to hate speech only?).
 
-## Setup
-
-- Data: 30 prompts sampled from AdvBench harmful strings (the same corpus used by the TYPO
-  baseline), covering 7 categories: self_harm (7), threat_violence (5), weapons_explosives (4),
-  fraud_scam (4), sexual_text (4), harass_hate (4), drugs (2).
-- Attack template and judging identical to the paper (decomposition LLM and judge unchanged).
-- ASR denominator = all 30 attempts; input rejections count as failures. Blocked items were
-  re-decomposed (≤3 rounds) and resubmitted — per-round log in
-  `results/run_final/advbench_recompose_log.csv`.
 
 ## Results
 
@@ -35,10 +26,3 @@ The attack generalizes beyond hate speech (86.7% overall, on par with the main e
 86.9%). On GPT-Image-2 the defense is input-side: of the 21 prompts that got through, 76.2%
 were judged harmful.
 
-## Files
-
-- `results/run_final/` — `items.csv` (per-sample status/rating/score/rationale for both
-  models), `summary.md` (the tables above), `advbench_coj_commands.csv` (attack prompts),
-  `advbench_recompose_log.csv` (re-decomposition rounds for blocked items), `config.json`
-  (setup), `images/` (all generated images for both models).
-- `code/` — `advbench_collage_rebuttal.py` (selection, generation on both models, judging).

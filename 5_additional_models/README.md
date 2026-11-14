@@ -1,7 +1,5 @@
 # 5. Additional Target Models — Gemini Nano Banana, Midjourney, SD Family
 
-**Answers:** 5yoR W2 (commercial models not in the original evaluation), Q2 (why the Stable
-Diffusion family was excluded, plus new SD results). Model coverage grows from 5 to 9.
 
 Across defense profiles, CollageAttack ASR decreases monotonically with defense strength but
 stays non-zero, and beats the baselines everywhere:
@@ -51,7 +49,6 @@ ASR = judged-Harmful / 200 on generated images (GPT-4.1, paper rubric, rating ==
 
 | Method | SDXL-base-1.0 | SD3.5-Large |
 |---|---|---|
-| Original | 14.0% | 47.0% |
 | PGJ | 2.0% | 12.5% |
 | TYPO | 14.5% | 28.0% |
 | **CollageAttack** | 1.0% | **30.0%** |
@@ -63,24 +60,3 @@ ASR = judged-Harmful / 200 on generated images (GPT-4.1, paper rubric, rating ==
 - **SD3.5 works**: its T5-XXL encoder (`max_sequence_length=512`) takes the full prompt and
   renders text reliably → CollageAttack reaches 30.0%, the best of the four methods.
 
-Implication: applicability is governed by two measurable factors — text-encoder context
-capacity and in-image text-rendering ability — both of which grew in the latest model
-generation (Nano Banana, GPT-Image, Doubao, FLUX.2, SD3.5). The exposed alignment gap becomes
-more general, not less, as models improve.
-
-## Files
-
-- `gemini_nanobanana/run_*/` — items.csv / summary.md / config.json per method (MPJ, PGJ,
-  CollageAttack).
-- `midjourney/results/run_*/` — same, for MPJ / PGJ / CollageAttack; `midjourney/code/
-  mj_collage_full.py` — submission driver (submit → poll → download → judge).
-- `sd_family/results_sdxl/`, `sd_family/results_sd35/` — per-sample judge CSVs for all four
-  methods (`judge_response` holds the full GPT-4.1 judgment; ASR = rating == Harmful).
-- `sd_family/prompts/` — the exact prompt sets for all four methods (collage / original /
-  pgj / typo).
-- `sd_family/code/` — `attack_model_sdxl.py`, `attack_model_sd35_large.py` (generation),
-  `judge_image_score.py` (judging), `prep_baseline_prompts.py`, and the one-click
-  `run_baselines_*.sh` / `run_sd*_generate_and_judge.sh` pipelines.
-
-Images for the 200-prompt runs are omitted for size; per-sample judgments are complete in the
-CSVs. Representative images available upon request.

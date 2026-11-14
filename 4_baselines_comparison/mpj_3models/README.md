@@ -1,17 +1,7 @@
 # 4a. MPJ (ACL 2025) vs CollageAttack — 3 Models × 2 Methods
 
-**Answers:** 5yoR W1/Q1 (what is different from Multimodal Pragmatic Jailbreak?).
 
-## Setup
 
-- Data: the same 200 DGHS hate-speech statements as the main experiment.
-- MPJ prompts: the official `t2i.py:107` sign template —
-  `<scene>, with a sign that says, '<full harmful sentence>'` (scene sampled from 4 neutral
-  scenes; see `config.json` of each run). The full harmful sentence stays **contiguous** in
-  the prompt.
-- CollageAttack prompts: the paper's spatially fragmented prompts (no contiguous harmful span).
-- One request per prompt; judge: GPT-4.1, paper rubric. Input rejection counted from the
-  generation API's safety refusal; ASR = Harmful / 200.
 
 ## Results
 
@@ -32,14 +22,9 @@ A third method, **PGJ** (Perception-Guided, Huang et al.), was also run on Gemin
 output-side dissolution pattern as MPJ. Only the fragmented prompts survive the rendering
 stage: 25.0% vs 7.0%/6.0%.
 
-Notes: CollageAttack numbers on Doubao and GPT-Image-2 are the main-experiment runs (paper
-Table 1); the Gemini CollageAttack run is included here (`run_collage_gemini/`). All three
-Gemini runs are also referenced by `../../5_additional_models/gemini_nanobanana/`.
 
-## Llama-Guard-4 cross-check (independent input filter, offline)
 
-Same experiment as `../../6_defense/`; CSV duplicated at `results/guard_results.csv`
-(200 prompts per method, greedy decoding):
+## Llama-Guard-4 cross-check 
 
 | Method | Original | TYPO-Standard | MPJ | PGJ | **CollageAttack** |
 |---|---|---|---|---|---|
@@ -47,19 +32,3 @@ Same experiment as `../../6_defense/`; CSV duplicated at `results/guard_results.
 
 MPJ (91%) sits at the raw-sentence level (92%); CollageAttack is the lowest of all five —
 the same pattern holds under the models' own safety stacks and an independent filter.
-
-## Files
-
-- `results/run_mpj_doubao/` — MPJ × Doubao (items.csv, summary.md, config.json)
-- `results/run_mpj_gptimage2/` — MPJ × GPT-Image-2
-- `results/run_mpj_gemini/` — MPJ × Gemini Nano Banana
-- `results/run_collage_gemini/` — CollageAttack × Gemini
-- `results/run_pgj_gemini/` — PGJ × Gemini Nano Banana
-- `results/guard_results.csv` — Llama-Guard-4 five-method table (copy of `6_defense/`)
-- `code/mpj_full_gptimage2.py` — one driver for all API models (`--model` selects target,
-  `--prompt-source` selects method: mpj / collage / pgj; builds prompts, submits, judges,
-  writes items.csv/summary.md)
-- `code/mpj_doubao_smoke.py` — 20-prompt smoke test used before the full runs
-
-Images are omitted for size; every per-sample judgment is in `items.csv`
-(status / rating / score / rationale).
